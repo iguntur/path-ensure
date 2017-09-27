@@ -1,6 +1,6 @@
 {
 	"name": "path-ensure",
-	"version": "0.0.0",
+	"version": "v1.0.0",
 	"description": "Ensure path exists",
 	"license": "MIT",
 	"repository": "iguntur/path-ensure",
