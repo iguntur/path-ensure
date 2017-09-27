@@ -1,0 +1,39 @@
+{
+	"name": "path-ensure",
+	"version": "0.0.0",
+	"description": "Ensure path exists",
+	"license": "MIT",
+	"repository": "iguntur/path-ensure",
+	"author": {
+		"name": "Guntur Poetra",
+		"email": "poetra.guntur@gmail.com",
+		"url": "github.com/iguntur"
+	},
+	"engines": {
+		"node": ">=4"
+	},
+	"scripts": {
+		"test": "xo && ava"
+	},
+	"files": [
+		"index.js"
+	],
+	"keywords": [
+		"path",
+		"fs",
+		"write",
+		"file",
+		"ensure",
+		"extra",
+		"exists",
+		"make-dir",
+		"mkdirp"
+	],
+	"dependencies": {
+		"make-dir": "^1.0.0"
+	},
+	"devDependencies": {
+		"ava": "*",
+		"xo": "*"
+	}
+}
