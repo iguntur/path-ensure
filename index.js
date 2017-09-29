@@ -7,7 +7,16 @@ module.exports = opts => {
 		cwd: process.cwd()
 	}, opts);
 
-	return function () {
+	const pathEnsure = function () {
+		const args = [opts.cwd].concat([].slice.call(arguments));
+		const pth = path.join.apply(null, args);
+
+		return Promise.resolve()
+			.then(() => makeDir(path.dirname(pth)))
+			.then(() => path.resolve(pth));
+	};
+
+	pathEnsure.sync = function () {
 		const args = [opts.cwd].concat([].slice.call(arguments));
 		const pth = path.join.apply(null, args);
 
@@ -15,4 +24,6 @@ module.exports = opts => {
 
 		return path.resolve(pth);
 	};
+
+	return pathEnsure;
 };

@@ -1,40 +1,36 @@
-import os from 'os';
 import fs from 'fs';
 import path from 'path';
 import test from 'ava';
+import pify from 'pify';
 import fn from './';
 
-const pkg = require('./package.json');
+const fsP = pify(fs);
 
-test('ensure file exists - cwd', t => {
+test('async', async t => {
 	const cwd = process.cwd();
-	const paths = fn();
+	const p = fn({cwd});
 
-	t.true(typeof paths === 'function');
-	t.is(paths('.tmp', 'foo', 'bar'), path.join(cwd, '.tmp/foo/bar'));
-	t.is(paths('/.tmp', 'foo-bar', 'baz'), path.join(cwd, '.tmp/foo-bar/baz'));
-	t.is(paths('/.tmp', '/a/b', '/c'), path.join(cwd, '.tmp/a/b/c'));
-	t.true(paths('.tmp/x/y/z/1.txt').includes('1.txt'));
-	t.true(paths('.tmp', 'a', 'b', 'baz.txt').endsWith('baz.txt'));
+	t.true(typeof p === 'function');
+	t.true(p() instanceof Promise);
+	t.is(await p(), cwd);
+	t.is(await p('.tmp', 'foo', 'bar'), path.join(cwd, '.tmp/foo/bar'));
+	t.is(await p('.tmp', 'foo', '/baz.txt'), path.join(cwd, '.tmp/foo/baz.txt'));
 
-	const x = paths('.tmp', 'foo/bar-baz', 'a.txt');
-	fs.writeFileSync(x, '🦄');
-	t.true(fs.existsSync(path.join(cwd, '.tmp/foo/bar-baz/a.txt')));
-	t.is(fs.readFileSync(path.join(cwd, '.tmp/foo/bar-baz/a.txt'), 'utf8'), '🦄');
+	const x = await p('.tmp', 'x/y/z', 'foo.txt');
+	await fsP.writeFile(x, '🍵');
+	t.is(await fsP.readFile(path.join(cwd, '.tmp/x/y/z/foo.txt'), 'utf8'), '🍵');
 });
 
-test('ensure file exists - os.tmpdir', t => {
-	const cwd = path.join(os.tmpdir(), pkg.name);
-	const paths = fn({cwd});
+test('sync', t => {
+	const cwd = process.cwd();
+	const p = fn({cwd});
 
-	t.true(typeof paths === 'function');
-	t.true(paths('a/b/c/d.txt').includes(pkg.name));
-	t.is(paths('abc', 'def'), path.join(cwd, 'abc/def'));
-	t.true(paths('abc', 'def') === path.join(cwd, 'abc/def'));
-	t.is(paths('/x/y/z', 'foo.txt'), path.join(cwd, 'x/y/z/foo.txt'));
+	t.true(typeof p.sync === 'function');
+	t.is(p.sync(), cwd);
+	t.is(p.sync('.tmp', 'foo', 'bar'), path.join(cwd, '.tmp/foo/bar'));
+	t.is(p.sync('/.tmp', 'foo', 'baz.txt'), path.join(cwd, '.tmp/foo/baz.txt'));
 
-	const x = paths('foo/bar-baz.txt');
+	const x = p.sync('.tmp', 'x/y/z', 'foo.txt');
 	fs.writeFileSync(x, '🦄');
-	t.true(fs.existsSync(path.join(cwd, 'foo/bar-baz.txt')));
-	t.is(fs.readFileSync(path.join(cwd, 'foo/bar-baz.txt'), 'utf8'), '🦄');
+	t.is(fs.readFileSync(path.join(cwd, '.tmp/x/y/z/foo.txt'), 'utf8'), '🦄');
 });

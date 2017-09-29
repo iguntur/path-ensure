@@ -2,6 +2,7 @@
 
 > Ensure path exists
 
+This just a simple module for ensure generate directory before writing the files. If you need more `API`, maybe you should use the [`fs-extra`](#https://github.com/jprichardson/node-fs-extra) module.
 
 ## Install
 
@@ -13,29 +14,60 @@ $ npm install path-ensure
 ## Usage
 
 ```js
-const fs = require('fs');
-const path = require('path');
 const pathEnsure = require('path-ensure');
 
-const pEnsure = pathEnsure({cwd: process.cwd()});
+const pEnsure = pathEnsure({cwd: __dirname});
 
-fs.writeFileSync(pEnsure('awesome', 'awesome', 'unicorn.txt'), '🦄');
-
-const unicorn = fs.readFileSync(
-    path.join(process.cwd(), 'awesome/awesome/unicorn.txt'),
-    'utf8'
-);
-
-console.log(unicorn);
-//=> 🦄
+pEnsure('awesome', 'unicorn.txt').then(filepath => {
+    console.log(filepath);
+    //=> /some/path/examples/awesome/unicorn.txt
+});
 ```
 
 
 ## API
 
-### `pathEnsure(`*[`options`](#options)*`)`
+### `pathEnsure([options])`
 
-Returns a function an apply with `path.join` API.
+Returns a `Promise` for a string input `paths`.
+
+Example
+
+```js
+const fs = require('fs');
+const pathEnsure = require('path-ensure');
+
+const pEnsure = pathEnsure();
+
+pEnsure('awesome', 'unicorn.txt').then(filepath => {
+    const writeStream = fs.createWriteStream(filepath);
+
+    writeStream.write('🦄');
+});
+```
+
+### `.sync([...paths])`
+
+Example
+
+```js
+const fs = require('fs');
+const pathEnsure = require('path-ensure');
+
+const pEnsure = pathEnsure();
+
+const writeStream = fs.createWriteStream(
+    pEnsure.sync('awesome', 'unicorn.txt')
+);
+
+writeStream.write('🦄');
+```
+
+#### paths
+
+The input `arguments` can be add in multiple times, think like `path.join('foo', 'bar')`.
+
+Type: `string`<br>
 
 #### options
 
@@ -50,6 +82,7 @@ Default: `process.cwd()`
 ## Related
 
 - [make-dir](https://github.com/sindresorhus/make-dir) - Make a directory and its parents if needed - Think `mkdir -p`
+- [fs-extra](https://github.com/jprichardson/node-fs-extra) - Contains methods that aren't included in the vanilla Node.js fs package.
 
 
 ## License
