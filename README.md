@@ -4,6 +4,17 @@
 
 This just a simple module for ensure generate directory before writing the files. If you need more `API`, maybe you should use the [`fs-extra`](#https://github.com/jprichardson/node-fs-extra) module.
 
+## Table Of Content
+
+- [Install](#install)
+- [Usage](#usage)
+- [API](#api)
+	- [`pathEnsure`](#pathensureoptionspaths)
+	- [`pathEnsure.sync`](#syncpaths)
+
+---
+
+
 ## Install
 
 ```
@@ -27,9 +38,12 @@ pEnsure('awesome', 'unicorn.txt').then(filepath => {
 
 ## API
 
-### `pathEnsure([options])`
+### pathEnsure([options])([...paths])
 
-Returns a `Promise` for a string input `paths`.
+- [options](#options): `<object>`
+- paths: `<string>`<br>
+	A sequence of path segments. Think like `path.join('foo', 'bar')`.
+- Return: `<Promise>`
 
 Example
 
@@ -46,7 +60,12 @@ pEnsure('awesome', 'unicorn.txt').then(filepath => {
 });
 ```
 
-### `.sync([...paths])`
+### .sync([...paths])
+
+- [options](#options): `<object>`
+- paths: `<string>`<br>
+	A sequence of path segments. Think like `path.join('foo', 'bar')`.
+- Return: `<string>`
 
 Example
 
@@ -63,20 +82,13 @@ const writeStream = fs.createWriteStream(
 writeStream.write('🦄');
 ```
 
-#### paths
-
-The input `arguments` can be add in multiple times, think like `path.join('foo', 'bar')`.
-
-Type: `string`<br>
 
 #### options
 
-Type: `object`
-
 ##### cwd
 
-Type: `string`<br>
-Default: `process.cwd()`
+- Type: `string`
+- Default: `process.cwd()`
 
 
 ## Related
