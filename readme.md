@@ -1,18 +1,14 @@
-# path-ensure [![Build Status](https://travis-ci.org/iguntur/path-ensure.svg?branch=master)](https://travis-ci.org/iguntur/path-ensure)
+# path-ensure
+
+[![Build Status](https://img.shields.io/travis/iguntur/path-ensure.svg?style=flat-square)](https://travis-ci.org/iguntur/path-ensure)
+[![node](https://img.shields.io/node/v/path-ensure.svg?style=flat-square)](#)
+[![npm](https://img.shields.io/npm/v/path-ensure.svg?style=flat-square)](https://www.npmjs.org/package/path-ensure)
 
 > Ensure path exists
 
-This just a simple module for ensure generate directory before writing the files. If you need more `API`, maybe you should use the [`fs-extra`](#https://github.com/jprichardson/node-fs-extra) module.
-
-## Table Of Content
-
-- [Install](#install)
-- [Usage](#usage)
-- [API](#api)
-	- [`pathEnsure`](#pathensureoptionspaths)
-	- [`pathEnsure.sync`](#syncpaths)
-
 ---
+
+A simple module to generate the directory before writing the files. See [`fs-extra`](https://github.com/jprichardson/node-fs-extra) for advance.
 
 
 ## Install
@@ -21,74 +17,42 @@ This just a simple module for ensure generate directory before writing the files
 $ npm install path-ensure
 ```
 
-
-## Usage
-
-```js
-const pathEnsure = require('path-ensure');
-
-const pEnsure = pathEnsure({cwd: __dirname});
-
-pEnsure('awesome', 'unicorn.txt').then(filepath => {
-    console.log(filepath);
-    //=> /some/path/examples/awesome/unicorn.txt
-});
-```
-
-
 ## API
 
-### pathEnsure([options])([...paths])
+### pathEnsure([...paths])
 
-- [options](#options): `<object>`
-- paths: `<string>`<br>
-	A sequence of path segments. Think like `path.join('foo', 'bar')`.
-- Return: `<Promise>`
+- Params:
+    - paths: `<string[]>` - A sequence of path segments.
+- Return: `<Promise<string>>`
+- Example:
+    ```js
+    const fs = require('fs');
+    const pathEnsure = require('path-ensure');
+    const fs = require('fs');
+    const pathEnsure = require('path-ensure');
 
-Example
+    (async () => {
+        const filepath = await pathEnsure(__dirname, 'some/path/to/create', 'unicorn.txt');
+        console.log(filepath);
+        const writeStream = fs.createWriteStream(filepath);
+        writeStream.write('🦄');
+    })();
+    ```
 
-```js
-const fs = require('fs');
-const pathEnsure = require('path-ensure');
+#### .sync([...paths])
 
-const pEnsure = pathEnsure();
-
-pEnsure('awesome', 'unicorn.txt').then(filepath => {
-    const writeStream = fs.createWriteStream(filepath);
-
-    writeStream.write('🦄');
-});
-```
-
-### .sync([...paths])
-
-- [options](#options): `<object>`
-- paths: `<string>`<br>
-	A sequence of path segments. Think like `path.join('foo', 'bar')`.
+- Params:
+    - paths: `<string[]>` - A sequence of path segments.
 - Return: `<string>`
-
-Example
-
-```js
-const fs = require('fs');
-const pathEnsure = require('path-ensure');
-
-const pEnsure = pathEnsure();
-
-const writeStream = fs.createWriteStream(
-    pEnsure.sync('awesome', 'unicorn.txt')
-);
-
-writeStream.write('🦄');
-```
-
-
-#### options
-
-##### cwd
-
-- Type: `string`
-- Default: `process.cwd()`
+- Example:
+    ```js
+    const fs = require('fs');
+    const pathEnsure = require('path-ensure');
+    const writeStream = fs.createWriteStream(
+        pathEnsure.sync('some/path/to/create', 'unicorn.txt')
+    );
+    writeStream.write('🦄');
+    ```
 
 
 ## Related
