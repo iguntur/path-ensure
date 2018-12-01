@@ -16,11 +16,13 @@
 		"clean": "rm -rf dist",
 		"clean:dist": "rm -rf dist/*.test.*",
 		"build": "npm run clean && tsc",
-		"build:release": "npm run build -- --declaration && npm run clean:dist",
+		"build:release": "npm run test && npm run build -- --declaration && npm run clean:dist",
 		"test": "npm run build && ava"
 	},
+	"main": "dist/index.js",
+	"typings": "dist/index.d.ts",
 	"files": [
-		"index.js"
+		"dist"
 	],
 	"keywords": [
 		"path",
