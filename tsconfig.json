@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"outDir": "dist",
+		"strictNullChecks": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"inlineSourceMap": false,
+		"noImplicitAny": false,
+		"preserveConstEnums": true,
+		"pretty": true,
+		"removeComments": true,
+		"sourceMap": false,
+		"target": "es2016",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"lib": [
+			"es2016",
+		]
+	},
+	"include": [
+		"**/*.ts"
+	]
+}
