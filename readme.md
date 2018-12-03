@@ -28,8 +28,6 @@ $ npm install path-ensure
     ```js
     const fs = require('fs');
     const pathEnsure = require('path-ensure');
-    const fs = require('fs');
-    const pathEnsure = require('path-ensure');
 
     (async () => {
         const filepath = await pathEnsure(__dirname, 'some/path/to/create', 'unicorn.txt');
